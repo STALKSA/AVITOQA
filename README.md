@@ -1,6 +1,6 @@
 # Задание 1. Поиск багов страницы Авито с результатами поиска авто
 
-- пройти на страницу с [обнаруженными багами](https://github.com/STALKSA/AVITOQA/blob/main/TASK1.md)
+- пройти на страницу с [обнаруженными багами](https://github.com/STALKSA/AVITOQA/blob/main/BUGSTASKONE.md)
 
 
 
