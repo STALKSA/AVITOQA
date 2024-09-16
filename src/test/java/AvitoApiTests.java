@@ -24,7 +24,7 @@ public class AvitoApiTests {
 
     @Test
     public void testGetAdById() {
-        int adId = 1; // Замените на ID существующего объявления
+        int adId = 1; 
 
         Response response = given()
                 .header("Content-Type", "application/json")
@@ -33,12 +33,12 @@ public class AvitoApiTests {
 
         response.then().statusCode(200)
                 .body("id", equalTo(adId))
-                .body("name", equalTo("Телефон")); // Проверьте реальное имя товара
+                .body("name", equalTo("Телефон")); 
     }
 
     @Test
     public void testUpdateAd() {
-        int adId = 1; // Замените на ID существующего объявления
+        int adId = 1; 
         String updatedRequestBody = "{ \"name\": \"Ноутбук\", \"price\": 95000, \"sellerId\": 3452, \"statistics\": { \"contacts\": 50, \"like\": 45, \"viewCount\": 25 }}";
 
         Response response = given()
@@ -54,7 +54,7 @@ public class AvitoApiTests {
 
     @Test
     public void testDeleteAd() {
-        int adId = 1; // Замените на ID существующего объявления
+        int adId = 1; 
 
         Response response = given()
                 .header("Content-Type", "application/json")
@@ -86,7 +86,7 @@ public class AvitoApiTests {
                 .get("https://qa-internship.avito.com/api/1/items");
 
         response.then().statusCode(200)
-                .body("items", hasSize(10)); // Предполагаем, что есть хотя бы 10 объявлений
+                .body("items", hasSize(10)); 
     }
 
     @Test
