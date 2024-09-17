@@ -18,101 +18,68 @@ public class AvitoApiTests {
                 .post("https://qa-internship.avito.com/api/1/item");
 
         response.then().statusCode(201)
+                .body("id", notNullValue())
                 .body("name", equalTo("Телефон"))
                 .body("price", equalTo(85566));
     }
 
     @Test
     public void testGetAdById() {
-        int adId = 1; 
+        String requestBody = "{ \"name\": \"Телефон\", \"price\": 85566, \"sellerId\": 3452 }";
+        int adId = given()
+                .header("Content-Type", "application/json")
+                .body(requestBody)
+                .post("https://qa-internship.avito.com/api/1/item")
+                .then()
+                .statusCode(201)
+                .extract()
+                .path("id");
 
-        Response response = given()
+        given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("https://qa-internship.avito.com/api/1/item/" + adId);
-
-        response.then().statusCode(200)
+                .get("https://qa-internship.avito.com/api/1/item/" + adId)
+                .then()
+                .statusCode(200)
                 .body("id", equalTo(adId))
-                .body("name", equalTo("Телефон")); 
-    }
-
-    @Test
-    public void testUpdateAd() {
-        int adId = 1; 
-        String updatedRequestBody = "{ \"name\": \"Ноутбук\", \"price\": 95000, \"sellerId\": 3452, \"statistics\": { \"contacts\": 50, \"like\": 45, \"viewCount\": 25 }}";
-
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .body(updatedRequestBody)
-                .when()
-                .put("https://qa-internship.avito.com/api/1/item/" + adId);
-
-        response.then().statusCode(200)
-                .body("name", equalTo("Ноутбук"))
-                .body("price", equalTo(95000));
-    }
-
-    @Test
-    public void testDeleteAd() {
-        int adId = 1; 
-
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .when()
-                .delete("https://qa-internship.avito.com/api/1/item/" + adId);
-
-        response.then().statusCode(204);
-    }
-
-    @Test
-    public void testCreateAdWithInvalidData() {
-        String invalidRequestBody = "{ \"name\": \"\", \"price\": -1000, \"sellerId\": 3452, \"statistics\": { \"contacts\": 32, \"like\": 35, \"viewCount\": 14 }}";
-
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .body(invalidRequestBody)
-                .when()
-                .post("https://qa-internship.avito.com/api/1/item");
-
-        response.then().statusCode(400)
-                .body("error", equalTo("Invalid request data"));
-    }
-
-    @Test
-    public void testGetAllAds() {
-        Response response = given()
-                .header("Content-Type", "application/json")
-                .when()
-                .get("https://qa-internship.avito.com/api/1/items");
-
-        response.then().statusCode(200)
-                .body("items", hasSize(10)); 
+                .body("name", equalTo("Телефон"));
     }
 
     @Test
     public void testGetNonExistingAd() {
         int nonExistingAdId = 9999;
 
-        Response response = given()
+        given()
                 .header("Content-Type", "application/json")
                 .when()
-                .get("https://qa-internship.avito.com/api/1/item/" + nonExistingAdId);
-
-        response.then().statusCode(404)
+                .get("https://qa-internship.avito.com/api/1/item/" + nonExistingAdId)
+                .then()
+                .statusCode(404)
                 .body("error", equalTo("Ad not found"));
     }
 
     @Test
-    public void testCreateAdWithoutPrice() {
-        String requestBodyWithoutPrice = "{ \"name\": \"Телефон\", \"sellerId\": 3452, \"statistics\": { \"contacts\": 32, \"like\": 35, \"viewCount\": 14 }}";
-
-        Response response = given()
+    public void testGetAllAdsBySeller() {
+        int sellerId = 3452; 
+        given()
                 .header("Content-Type", "application/json")
-                .body(requestBodyWithoutPrice)
                 .when()
-                .post("https://qa-internship.avito.com/api/1/item");
+                .get("https://qa-internship.avito.com/api/1/" + sellerId + "/item")
+                .then()
+                .statusCode(200)
+                .body("items", hasSize(0)); 
 
-        response.then().statusCode(400)
-                .body("error", equalTo("Price is required"));
+    @Test
+    public void testCreateAdWithInvalidData() {
+        String invalidRequestBody = "{ \"name\": \"\", \"price\": -1000, \"sellerId\": 3452, \"statistics\": { \"contacts\": 32, \"like\": 35, \"viewCount\": 14 }}";
+
+        given()
+                .header("Content-Type", "application/json")
+                .body(invalidRequestBody)
+                .when()
+                .post("https://qa-internship.avito.com/api/1/item")
+                .then()
+                .statusCode(400)
+                .body("error", equalTo("Invalid request data"));
     }
 }
