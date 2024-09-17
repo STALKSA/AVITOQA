@@ -31,14 +31,15 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- Hamcrest для удобных матчеров в тестах -->
+        <!-- RestAssured матчеры -->
         <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>4.4.0</version>
             <scope>test</scope>
         </dependency>
 
+        <!-- Hamcrest для удобных матчеров в тестах -->
         <dependency>
             <groupId>org.hamcrest</groupId>
             <artifactId>hamcrest</artifactId>
@@ -62,5 +63,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
